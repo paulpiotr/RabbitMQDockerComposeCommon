@@ -1,0 +1,99 @@
+#docker-compose up --no-recreate
+#docker-compose up --build
+#docker volume create --name=postgres
+#docker rm -f $(docker ps -a -q)
+#docker volume prune
+#docker-compose up --build
+#docker run -it --rm -p 8000:80 --name aspnetcore mcr.microsoft.com/dotnet/core/samples:aspnetapp
+
+version: '3.7'
+#version: '2'
+
+services:
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - 15672:15672
+      - 5672:5672
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq/mnesia/
+    environment: 
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_NODENAME=rabbitmq@localhost
+      - RABBITMQ_USER=rabbit
+      - RABBITMQ_PASSWORD=rabbit
+    networks:
+      - rabbitmq
+#    depends_on:
+#      - postgres
+#    links:
+#      - postgres
+#   postgres:
+#     hostname: postgres
+#     image: postgres
+#     container_name: postgres
+#     restart: always
+#     ports:
+#       - 5433:5433
+#     environment:
+#       - POSTGRES_DB=postgres
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+# #      - PGDATA=/mnt/postgres
+#     volumes:
+#       - postgres:/var/lib/postgresql/data
+#       # Montowanie volumenu
+#       - ./postgres:/mnt/postgres
+# #      - postgres:/etc/postgresql
+# #      - postgres:/var/log/postgresql
+#     networks:
+#       - postgres
+#   web:
+#     hostname: aspnet
+#     image: mcr.microsoft.com/dotnet/core/aspnet:3.1
+#     container_name: aspnet
+#     restart: always
+#     ports:
+#         - 5000:80
+#     environment:
+#       - WORKDIR /app
+#       - ASPNETCORE_URLS http://*:5000
+#   mssql:
+#     #image: mcr.microsoft.com/mssql/server:2019-CU4-ubuntu-18.04
+#     image: mcr.microsoft.com/mssql/server:latest
+#     hostname: mssql
+#     container_name: mssql
+#     restart: always
+#     ports:
+#       - 11433:1433
+#       - 11434:1434
+#       - 11431:1431
+#     volumes:
+#       - ./mssql/data:/var/opt/mssql/data
+#       - ./mssql/log:/var/opt/mssql/log
+#       - ./mssql/secret:/var/opt/mssql/secrets
+#     environment:
+#       - TZ=Europe/Warsaw
+#       - MSSQL_MEMORY_LIMIT_MB=2048
+#       - ACCEPT_EULA=Y
+#       - MSSQL_SA_PASSWORD=8TMBny-dwxviDrV5
+#       - SA_PASSWORD=8TMBny-dwxviDrV5
+#       - MSSQL_AGENT_ENABLED=true
+#       - AGENT_ENABLED=true
+# volumes:
+#   postgres:
+#     driver: local
+#volumes:
+#  postgres:
+#     external: true
+networks:
+  rabbitmq:
+    driver: bridge
+  postgres:
+    driver: bridge
+  mssql:
+    driver: bridge
